@@ -1,0 +1,16 @@
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: block;
+}
+
+.modal-header {
+    color: #fff;
+    background-color: #63c2de;
+}
+
+label.library {
+    margin-left: .15rem;
+}
