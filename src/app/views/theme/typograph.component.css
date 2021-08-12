@@ -6,9 +6,9 @@
     display: block;
 }
 
-.modal-header {
-    color: #fff;
-    background-color: #63c2de;
+.modal-header, .modal-footer, .modal-body {
+    /* color: #fff; */
+    /* background-color: #808080; */
 }
 
 label.library {

@@ -59,6 +59,9 @@ export class ExerciseComponent implements OnInit {
       }
       this.content = this.sanitizer.bypassSecurityTrustHtml(output);
 
+    } else {
+      this.text = ""
+      this.content = ""
     }
    
   }

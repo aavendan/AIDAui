@@ -24,10 +24,30 @@ export class TypographyComponent {
   text = "";
   tense = "";
   inputtext = '';
+
+  keys = {
+    'path': ['course','book', 'chapter'],
+    'evaluation': 'evaluation'
+  } 
   libraries = [
-    {'name': 'AIDA course'},
-    {'name': 'Basic 101'},
-    {'name': 'Advanced English course'}
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course II'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book2',
+      'chapter': 'Chapter 03',
+      'evaluation': 'Advanced English course'
+    },
   ]
 
   
@@ -62,23 +82,44 @@ export class TypographyComponent {
   }
 
   // Generate exercise
-  generateExercise(inputText, idx) {
-    idx = idx == -1? 0:idx;
-    if(inputText.length > 0) {
+  generateExercise(inputText, idTarget) {
+    
+    let idx = idTarget == -1? 0:idTarget;
+    let assigned = idTarget == -1;
+
+    if(inputText.trim().length > 0) {
       this.aidaService.getExercise(inputText, this.models[idx].modelId)
       .then(response => {
         this.block = response.block;
         this.gaps = response.gaps;
         this.text = inputText;
 
-        this.exercise.nativeElement.classList.add('shown')
-        this.generateOtherTenses()
+        //show exercises box
+        if(this.exercise.nativeElement.classList.contains('hidden')) {
+          this.exercise.nativeElement.classList.toggle('hidden')
+          this.exercise.nativeElement.classList.add('shown')
+        }
+                
+        let idGenerated = this.generateOtherTenses()
         
         this.tense = this.models[idx].label 
+        
+        if(assigned) {
+          this.selectModel.nativeElement.value = idGenerated
+        }
 
+        /* console.log("Selected idx ", idx)
+        console.log("Generated idx ", idGenerated) */
       })
     } else {
-      this.exercise.nativeElement.classList.add('hidden')
+
+      //hide exercises box
+      if(this.exercise.nativeElement.classList.contains('shown')) {
+        this.exercise.nativeElement.classList.toggle('shown')
+        this.exercise.nativeElement.classList.add('hidden')
+      }
+      
+      this.selectModel.nativeElement.value = -1
       this.loadModels()
     }
 
@@ -99,7 +140,7 @@ export class TypographyComponent {
     var dict = {};
     let arrTenses = [];
     let allcount = 0;
-    
+    let idx = -1;
 
     /* for(let model of this.models) { */
     this.models.forEach((model, itx) => {
@@ -115,11 +156,11 @@ export class TypographyComponent {
       }
      
       arrTenses.push(model)
-      
+      idx = count != 0 && idx == -1? itx : idx;
     })
 
     this.models = [...arrTenses];
-
+    return idx
   }
   
   

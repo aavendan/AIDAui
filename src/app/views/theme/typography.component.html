@@ -45,9 +45,9 @@
     <div #exercise class="col-sm-6 col-md-7 hidden">
       <div class="card">
         <div class="card-header d-flex justify-content-between">
-          <b>Exercises {{tense}}</b>
+          <div>Tense: <b> {{tense}}</b></div>
           <div class="btn-group" dropdown placement="top left">
-            <button type="button" class="btn btn-primary" (click)="openModal(template)">Save Exercise</button>
+            <button type="button" class="btn btn-success" (click)="openModal(template)">Save Exercise</button>
             <!-- <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
               Save <span class="caret"></span>
             </button>
@@ -72,10 +72,14 @@
       </button>
     </div>
     <div class="modal-body">
-      <div *ngFor="let library of libraries">
-        <input type="checkbox" id="cbox2" value="second_checkbox">
-        <label for="cbox2" class="library">{{library.name}}</label> 
+      <div *ngFor="let library of libraries; let i = index">
+        <input type="checkbox" id="cbox{{i}}" value="{{library.evaluation}}">
+        <!-- <label for="cbox{{i}}" class="library">{{library.course}} / {{library.book}} / {{library.chapter}} / {{library.evaluation}}</label> --> 
+        <label for="cbox{{i}}" class="library"><span *ngFor="let key of keys.path"> {{library[key]}} / </span> {{library[keys.evaluation]}}</label>
       </div>
+    </div>
+    <div class="modal-footer">
+      <div class="mx-auto">+ new library</div>
     </div>
   </ng-template>
 
