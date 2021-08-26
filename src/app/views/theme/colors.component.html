@@ -1,5 +1,78 @@
 <div class="animated fadeIn">
-  
+  <div class="card">
+    <div class="card-header">
+      <i class="icon-diamond"></i> AIDA Resources
+    </div>
+    <div class="card-body">
+      
+      <div class="form-group row">
+        <label class="col-md-1  offset-md-1  col-form-label text-right" for="select1">Tenses</label>
+        <div class="col-md-3">
+          <select #selectModel name="select1" class="form-control" (change)="modelChanged($event)">
+            <option value="-1">Select a model</option>
+            <option value="{{i}}" *ngFor="let model of models; let i = index">{{model.label}}</option>
+          </select>
+        </div>
+        <label class="col-md-2 col-form-label text-right" for="select2">Resources</label>
+        <div class="col-md-3">
+          <select #selectResource name="select2" class="form-control" (change)="resourceChanged($event)">
+            <option value="-1">Select a resource</option>
+            <option value="{{i}}" *ngFor="let resource of resources; let i = index">{{resource.label}}</option>
+          </select>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <table class="table table-responsive-sm table-hover bg-white  border mb-0 my-2" *ngIf="texts?.length > 0">
+    <thead class="thead-light">
+      <tr>
+        <th class="text-center">Exercise</th>
+        <th>Type of exercise</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let text of texts; let i = index">
+      <tr>
+        <td class="text-center">
+          <div class="sample" style="width: 500px;">{{text | slice:0:100 }}</div>
+        </td>
+        <td>
+          <select id="select2" name="select2" class="form-control">
+            <option value="-1">Select a type of exercise</option>
+            <option value="0">Fill in the gap</option>
+          </select>
+          
+        </td>
+        <td>
+          <a data-toggle="collapse" href="#collapseExample{{i}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <span class="font-weight-bold pr-2"><i class="icon-plus h6"></i> More info</span>  
+          </a>
+          <span class="font-weight-bold pr-2"><i class="icon-pencil h6"></i> Edit</span>
+          <span class="font-weight-bold"><i class="icon-folder-alt h6"></i> Save</span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="collapse" id="collapseExample{{i}}">
+          <div class="m-3">
+            {{text}}
+          </div>
+        </td>
+      </tr>
+     
+    </tbody>
+  </table>
+  <!-- <div class="card" *ngIf="texts?.length > 0">
+    <div class="card-header">
+      Exercises 
+    </div>
+    <div class="card-body">
+      
+    </div>
+  </div> -->
+
   <!--<div class="card">
     <div class="card-header">
       <i class="icon-drop"></i> Theme colors

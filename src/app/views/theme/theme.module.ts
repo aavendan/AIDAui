@@ -18,6 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'; 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { EllipsisModule } from 'ngx-ellipsis';
+
 import { ExerciseComponent } from '../../components/exercise/exercise.component';
 
 @NgModule({
@@ -27,6 +29,7 @@ import { ExerciseComponent } from '../../components/exercise/exercise.component'
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    EllipsisModule,
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
   ],
