@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild,ElementRef } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, ViewChild,ElementRef,  Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser"
 
 @Component({
@@ -11,9 +11,15 @@ export class ExerciseComponent implements OnInit {
   @Input() gaps:Array<any>;
   @Input() block:Array<any>;
   @Input() text:String;
+  @Output() hasInputs = new EventEmitter<boolean>();
 
   content: SafeHtml;
-  spots = [];
+  items: string[] = [
+    'The first choice!',
+    'And another choice for you.',
+    'but wait! A third!'
+  ];
+  
 
   constructor(private sanitizer: DomSanitizer) { }
 
@@ -46,18 +52,34 @@ export class ExerciseComponent implements OnInit {
         let hint = this.isGap(indexes[i], indexes[i+1])
         let placeholder = this.text.substring(indexes[i], indexes[i+1])
         if(hint.length > 0) {
-          finalTokens.push('<input type="text" placeholder="'+placeholder+'"> <b>['+hint+']</b>');
+          finalTokens.push({
+            "type": "input",
+            "placeholder": placeholder,
+            "hint": hint,
+            "isInput": true
+          });
         } else {
-          finalTokens.push( this.text.substring(indexes[i], indexes[i+1]) )
+          finalTokens.push( {
+            "type": "text",
+            "value":  this.text.substring(indexes[i], indexes[i+1]),
+            "isInput": false
+          })
         }
       }
+
+     /*  console.log(finalTokens) */
 
       //Output
       let output ='No exercises for this tense';
       if(this.hasExercise()) {
         output = finalTokens.join(' ')
-      }
-      this.content = this.sanitizer.bypassSecurityTrustHtml(output);
+      } 
+
+      //emit to parent
+      this.hasInputs.emit(this.hasExercise());
+      this.content = finalTokens;
+     /*  this.content = output; */
+      // this.content = this.sanitizer.bypassSecurityTrustHtml(output);
 
     } else {
       this.text = ""
@@ -77,5 +99,9 @@ export class ExerciseComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  onSave() {
+    alert('hey!')
   }
 }

@@ -1,4 +1,17 @@
 .exercise {
-   /*  padding: 0.5%;
-    background-color: #e8fcf1; */
+    line-height: 2em;
+}
+
+.gap-spot {
+    display: inline-block;
+   /*  padding: 1%;
+    border: 0.25pt dotted black; */
+}
+
+.verb{
+    margin: 0.5em 0;
+}
+
+.dropdown-menu.show {
+    transform: translateY(7px) !important;
 }

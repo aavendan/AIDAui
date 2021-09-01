@@ -14,3 +14,7 @@
 label.library {
     margin-left: .15rem;
 }
+
+.modal-header {
+    padding-bottom: 0px !important;
+}
