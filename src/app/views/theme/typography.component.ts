@@ -13,7 +13,11 @@ export class TypographyComponent {
   @ViewChild('inputText') inputText:ElementRef;
   @ViewChild('exercise') exercise:ElementRef;
   
-  modalRef: BsModalRef;
+  @ViewChild('templateReportHint') templateReportHint:TemplateRef<any>;
+  
+  modalSaveExercise: BsModalRef;
+  modalReportHint: BsModalRef;
+
   config = {
     animated: true
   };
@@ -24,6 +28,7 @@ export class TypographyComponent {
   text = "";
   tense = "";
   inputtext = '';
+  item: any;
 
   keys = {
     'path': ['course','book', 'chapter'],
@@ -58,7 +63,8 @@ export class TypographyComponent {
   } 
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, this.config);
+    this.modalSaveExercise = this.modalService.show(template, this.config);
+    
   }
 
   loadModels() {
@@ -88,7 +94,7 @@ export class TypographyComponent {
     let assigned = idTarget == -1;
 
     if(inputText.trim().length > 0) {
-      this.aidaService.getExercise(inputText, this.models[idx].modelId)
+      this.aidaService.createExercise(inputText, this.models[idx].modelId)
       .then(response => {
         this.block = response.block;
         this.gaps = response.gaps;
@@ -163,6 +169,9 @@ export class TypographyComponent {
     return idx
   }
   
-  
+  reportHint(value){
+    this.item = value;
+    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
+  }
 
 }

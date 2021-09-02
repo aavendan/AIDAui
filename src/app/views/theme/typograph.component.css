@@ -18,3 +18,7 @@ label.library {
 .modal-header {
     padding-bottom: 0px !important;
 }
+
+.modal-footer {
+    padding: .75rem !important;
+}

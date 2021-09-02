@@ -47,7 +47,7 @@
         <div class="card-header d-flex justify-content-between">
           <div>Tense: <b> {{tense}}</b></div>
           <div class="btn-group" dropdown placement="top left">
-            <button type="button" class="btn btn-success" (click)="openModal(template)">Save Exercise</button>
+            <button type="button" class="btn btn-success" (click)="openModal(templateSaveExercise)">Save Exercise</button>
             <!-- <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
               Save <span class="caret"></span>
             </button>
@@ -58,16 +58,21 @@
 
         </div>
         <div class="card-body">
-          <app-exercise [block]="block" [gaps]="gaps" [text]="text"></app-exercise>
+          <app-exercise 
+          [block]="block" 
+          [gaps]="gaps" 
+          [text]="text"
+          (hasReportHint)="reportHint($event)">
+        </app-exercise>
         </div>
       </div>    
     </div>
   </div>
 
-  <ng-template #template>
+  <ng-template #templateSaveExercise>
     <div class="modal-header">
       <h3 class="modal-title pull-left">Save to ... </h3>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalSaveExercise.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -82,6 +87,23 @@
       <div class="mx-auto">+ new library</div>
     </div>
   </ng-template>
+
+  <ng-template #templateReportHint>
+    <div class="modal-header">
+      <h3 class="modal-title pull-left">Report placeholder and hint</h3>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalReportHint.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>
+    </div>
+  </ng-template>
+
+  
 
   <!-- <div class="card">
     <div class="card-header">

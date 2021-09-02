@@ -54,7 +54,7 @@
               [block]="element.block" 
               [gaps]="element.gaps" 
               [text]="element.text" 
-              (hasInputs)="hasExercises($event)">
+              (hasReportHint)="reportHint($event)">
 
               </app-exercise>
             </div>
@@ -268,3 +268,18 @@
     </div>
   </div> -->
 </div>
+
+<ng-template #templateReportHint>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Report placeholder and hint</h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalReportHint.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>
+  </div>
+</ng-template>

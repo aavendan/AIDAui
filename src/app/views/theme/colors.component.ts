@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit, ViewChild,ElementRef } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild,ElementRef, TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -27,16 +28,25 @@ export class ColorsComponent implements OnInit {
   @ViewChild('selectType') selectType:ElementRef;
   @ViewChild('exercise') exercise:ElementRef;
 
+  @ViewChild('templateReportHint') templateReportHint:TemplateRef<any>;
+
+  modalReportHint: BsModalRef;
+
+  config = {
+    animated: true
+  };
+
   models = [];
   resources = [];
   texts = [];
+  item: any;
 
   dataSource = [];
   columnsToDisplay = ['exercise'];
   expandedElement: Exercise;
 
 
-  constructor(private aidaService: AidaService) {
+  constructor(private aidaService: AidaService, private modalService: BsModalService) {
     /* , @Inject(DOCUMENT) private _document: any */
   }
 
@@ -115,7 +125,7 @@ export class ColorsComponent implements OnInit {
       }));
 
       results.map( r => {
-        this.aidaService.getExercise(r['text'],this.models[idModel].modelId)
+        this.aidaService.createExercise(r['text'],this.models[idModel].modelId)
         .then( r2 => {
           r['block'] = r2.block
           r['gaps'] = r2.gaps
@@ -123,15 +133,11 @@ export class ColorsComponent implements OnInit {
         })
       })
 
-      /* console.log(results) */
-
       this.texts = results.filter( (el) => {
         return el['text'] != "";
       });
 
-      
-
-      console.log(this.texts)
+      /* console.log(this.texts) */
 
       /* this.aidaService.getExercisesByResource(resourceName, content)
       .then(response => { 
@@ -142,7 +148,7 @@ export class ColorsComponent implements OnInit {
   }
 
   async convertToExercise(text, model) {
-    return await this.aidaService.getExercise( text, model)
+    return await this.aidaService.createExercise( text, model)
     .then(response => {
       return {
         'block' : response.block,
@@ -151,10 +157,14 @@ export class ColorsComponent implements OnInit {
     })
   } 
 
-  hasExercises(has: boolean){
-    /* console.log(has) */
-  }
+  /* hasExercises(has: boolean){
+    console.log(has)
+  } */
 
+  reportHint(value){
+    this.item = value;
+    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
+  }
 }
 
 export interface Exercise {

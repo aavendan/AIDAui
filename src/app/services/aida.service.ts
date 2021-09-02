@@ -24,7 +24,7 @@ export class AidaService {
     return response.json();
   }
 
-  async getExercise(text,model) {
+  async createExercise(text,model) {
     let data = {
       'text': text,
       'model': model
@@ -38,7 +38,6 @@ export class AidaService {
 
     return response.json();
   }
-
 
   async getExercisesByResource(resourceId, contentMax) {
 
@@ -90,6 +89,22 @@ export class AidaService {
     
   }
 
-  
+  async getExercises(){
+    let contentMax = '20';
+    let resourceId = 'the-adventures-of-tom-sawyer';
+    let promises = []
+    
+    Array.from({length:parseInt(contentMax)-1},(v,k)=>k+1).forEach(id => {
+      promises.push(fetch(`https://damp-beach-17296.herokuapp.com/http://193.190.127.213:8000/aida/api/v1/${resourceId}/exercises?index=${id}`))
+    })
+
+    let results = await Promise.allSettled(promises);
+    return Promise.allSettled(results.map(function (response) {
+      if (response.status == "fulfilled") {
+        return response['value'].json();
+      }
+    }));
+
+  }
 
 }
