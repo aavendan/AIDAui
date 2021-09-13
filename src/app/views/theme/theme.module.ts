@@ -28,7 +28,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { BadgesComponent } from '../notifications/badges.component';
 import { DropdownsComponent } from '../buttons/dropdowns.component';
 
+import { TextSelectDirective } from "../../directives/textselect/text-select.directive";
 import { ExerciseComponent } from '../../components/exercise/exercise.component';
+
+import { AllModule } from '../../all.module';
 
 @NgModule({
   imports: [
@@ -44,12 +47,13 @@ import { ExerciseComponent } from '../../components/exercise/exercise.component'
     MatTableModule,
     MatListModule,
     MatButtonModule,
-   
+    /* AllModule */
   ],
   declarations: [
     ColorsComponent,
     TypographyComponent,
     BadgesComponent,
+    TextSelectDirective,
     ExerciseComponent,
     DropdownsComponent
   ]

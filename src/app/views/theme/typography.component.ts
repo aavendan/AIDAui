@@ -174,4 +174,8 @@ export class TypographyComponent {
     this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
   }
 
+  newText(value) {
+    this.inputText.nativeElement.value = value;
+  }
+
 }

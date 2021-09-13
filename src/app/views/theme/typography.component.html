@@ -62,7 +62,8 @@
           [block]="block" 
           [gaps]="gaps" 
           [text]="text"
-          (hasReportHint)="reportHint($event)">
+          (hasReportHint)="reportHint($event)"
+          (hasNewText)="newText($event)">
         </app-exercise>
         </div>
       </div>    
@@ -96,7 +97,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <div>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
+      <div><b>Reporting: </b>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>

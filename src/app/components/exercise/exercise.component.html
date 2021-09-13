@@ -1,22 +1,68 @@
 <!-- [innerHtml]="content" -->
-<ng-template ngFor let-item [ngForOf]="content" let-i="index">
-    <p *ngIf="item.isInput; then thenBlock else elseBlock"></p>
-    <ng-template #thenBlock>
-        <div class="gap-spot">
-            <span id="gap-{{i}}">
-                <input type="text" class="verb" placeholder="{{item.placeholder}}"> <b>[{{item.hint}}]</b>
-            </span>            
-           
-            <div class="btn-group" dropdown>
-                <a href id="basic-link" dropdownToggle (click)="false"
-                    aria-controls="basic-link-dropdown"><i class="fa fa-info-circle"></i></a>
-                <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                    role="menu" aria-labelledby="basic-link">
-                    <li role="menuitem"><a class="dropdown-item" (click)="hideThisGap(i)">Hide this gap</a></li>
-                    <li role="menuitem"><a class="dropdown-item" (click)="reportHint(item)">Report this error</a></li>
-                </ul>
+<!-- (mouseup)="showSelectedText()"  -->
+<!-- (textSelect)="renderRectangles( $event )" -->
+<!-- (mouseup)="showSelectedText($event)" -->
+<div (textSelect)="renderRectangles($event)" class="container">
+    <ng-template ngFor let-item [ngForOf]="content" let-i="index">
+        <p *ngIf="item.isInput; then thenBlock else elseBlock"></p>
+        <ng-template #thenBlock>
+            <div class="gap-spot">
+                <span id="gap-{{i}}">
+                    <input type="text" class="verb" placeholder="{{item.placeholder}}"> <b>[{{item.hint}}]</b>
+                </span>            
+            
+                <div class="btn-group" dropdown>
+                    <a href id="basic-link" dropdownToggle (click)="false"
+                        aria-controls="basic-link-dropdown"><i class="fa fa-info-circle"></i></a>
+                    <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                        role="menu" aria-labelledby="basic-link">
+                        <li role="menuitem"><a class="dropdown-item" (click)="hideThisGap(i)">Hide this gap</a></li>
+                        <li role="menuitem"><a class="dropdown-item" (click)="reportHint(item)">Report this error</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </ng-template>
+        <ng-template #elseBlock>{{item.value}}</ng-template>    
     </ng-template>
-    <ng-template #elseBlock>{{item.value}}</ng-template>    
-</ng-template>
+</div>
+
+<div
+    *ngIf="hostRectangle"
+    class="indicator"
+    [style.left.px]="hostRectangle.left"
+    [style.top.px]="hostRectangle.top"
+    [style.width.px]="hostRectangle.width"
+    [style.height.px]="0">
+    <div class="indicator__cta">
+        <!--
+            NOTE: Because we DON'T WANT the selected text to get deselected
+            when we click on the call-to-action, we have to PREVENT THE 
+            DEFAULT BEHAVIOR and STOP PROPAGATION on some of the events. The
+            byproduct of this is that the (click) event won't fire. As such,
+            we then have to consume the click-intent by way of the (mouseup)
+            event.
+        -->
+        <a
+            (mousedown)="$event.preventDefault()"
+            (mouseup)="$event.stopPropagation(); shareSelection()"
+            class="indicator__cta-link">
+            Use this text as exercise
+        </a>
+    </div>
+</div>
+
+<!-- <h3>highlighted</h3>
+<div [innerHtml]="highlighted"></div> -->
+<!-- 
+<h3>text</h3>
+<div [innerHtml]="onlytext"></div> -->
+<!-- 
+
+
+<div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="false">
+    <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right floating"
+        role="menu" aria-labelledby="basic-link">
+        <li role="menuitem"><a class="dropdown-item" (click)="hideThisGap(i)">Hide this gap</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click)="reportHint(item)">Report this error</a></li>
+    </ul>
+</div> -->

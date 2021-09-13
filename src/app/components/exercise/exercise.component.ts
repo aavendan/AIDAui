@@ -1,5 +1,18 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild,ElementRef,  Output, EventEmitter } from '@angular/core';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser"
+import { Component, Input, OnInit, 
+  SimpleChanges, ViewChild,ElementRef,  Output, EventEmitter, Inject } from '@angular/core';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DOCUMENT } from '@angular/common';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+
+// Import the application components and services.
+import { TextSelectEvent } from "../../directives/textselect/text-select.directive";
+
+interface SelectionRectangle {
+	left: number;
+	top: number;
+	width: number;
+	height: number;
+}
 
 @Component({
   selector: 'app-exercise',
@@ -10,10 +23,11 @@ export class ExerciseComponent implements OnInit {
 
   @Input() gaps:Array<any>;
   @Input() block:Array<any>;
-  @Input() text:String;
+  @Input() text:String = "";
 
   @Output() hasInputs = new EventEmitter<boolean>();
   @Output() hasReportHint = new EventEmitter<any>();
+  @Output() hasNewText = new EventEmitter<string>();
 
   /* content: SafeHtml; */
   content = [];
@@ -22,14 +36,23 @@ export class ExerciseComponent implements OnInit {
     'And another choice for you.',
     'but wait! A third!'
   ];
-  
 
-  constructor(private sanitizer: DomSanitizer) { }
+  highlighted = 'nothing';
+  onlytext = '';
+
+
+  public hostRectangle: SelectionRectangle | null;
+
+  constructor(private sanitizer: DomSanitizer, @Inject(DOCUMENT) private document: Document) {
+    this.hostRectangle = null;
+  }
 
   ngOnInit(): void {
-    console.log(this.block)
-    this.text = this.block['text']
-    this.createExercise()
+    /* console.log(this.block) */
+    this.text = this.block['text'];
+
+    if(this.block.length> 0)
+      this.createExercise()
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -80,7 +103,7 @@ export class ExerciseComponent implements OnInit {
       } else {
         finalTokens.push( {
           "type": "text",
-          "value":  this.text.substring(indexes[i], indexes[i+1]),
+          "value":  this.text.replace(/(\r\n|\n|\r)/gm, " ").substring(indexes[i], indexes[i+1]),
           "isInput": false
         })
       }
@@ -119,4 +142,136 @@ export class ExerciseComponent implements OnInit {
   reportHint(item) {
     this.hasReportHint.emit(item);
   }
+
+  /* https://www.bennadel.com/blog/3439-creating-a-medium-inspired-text-selection-directive-in-angular-5-2-10.htm */
+  
+  renderRectangles( event: TextSelectEvent ) : void {
+
+    /* console.group( "Text Select Event" );
+		console.log( "Text:", event.text );
+		console.log( "Viewport Rectangle:", event.viewportRectangle );
+		console.log( "Host Rectangle:", event.hostRectangle );
+		console.groupEnd(); */
+
+		// If a new selection has been created, the viewport and host rectangles will
+		// exist. Or, if a selection is being removed, the rectangles will be null.
+		if ( event.hostRectangle ) {
+
+			this.hostRectangle = event.hostRectangle;
+      this.hostRectangle.top = this.hostRectangle.top + 80;
+			this.onlytext = event.text.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s{2,}/g, ' ');;
+
+		} else {
+
+			this.hostRectangle = null;
+			this.onlytext = "";
+
+		}
+
+  }
+
+  shareSelection() {
+    /* let hints = this.getHints(this.onlytext)
+    let multiplist = this.splitMulti(this.onlytext, hints)
+    let arrValues = this.valuesOnText(this.onlytext, hints, multiplist)
+    console.log(multiplist) */
+
+    let hints = this.getHints(this.onlytext)
+    /* console.log(this.content)
+    console.log(hints) */
+    this.hasNewText.emit(this.onlytext);
+  }
+
+  getHints(text) {
+    let regexp = /\[.*?\]/g;
+    let matchAll = text.matchAll(regexp);
+    return Array.from(matchAll);
+  }
+  
+  splitMulti(str, tokens){
+    var tempChar = tokens[0]; // We can use the first token as a temporary join character
+    for(var i = 1; i < tokens.length; i++){
+        str = str.split(tokens[i]).join(tempChar);
+    }
+    str = str.split(tempChar);
+
+    return str;
+  }
+
+  valuesOnText(str, hints, multiplist) {
+    let output = []
+    hints.forEach(element => {
+      let idx = str.indexOf(element);
+      output.push({'element':element, 'start': idx , 'end': idx + element.length})
+    });
+
+    return output;
+  }
+
+  //old
+
+  showSelectedText(event) {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    }/*  else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    } */
+    /* console.log(text)
+    console.log(text.length)
+    console.log(window.getSelection().getRangeAt(0).commonAncestorContainer['innerHTML']) */
+    
+
+    let selection = window.getSelection();
+    let oRange = selection.getRangeAt(0); //get the text range
+    var start = oRange.startOffset;
+    var end = oRange.endOffset;
+    let oRect = oRange.getBoundingClientRect();
+
+    let endoced = encodeURIComponent(window.getSelection().toString()).replace(/[!'()*]/g, escape)
+    /* console.log(endoced) */
+
+   // Find out how much (if any) user has scrolled
+   /* var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+     */    
+   // Get cursor position
+   const posX = event.clientX - 110;
+   const posY = event.clientY + 20;
+    
+   /* console.log(posX, posY) */
+
+   /* this.highlighted = window.getSelection().getRangeAt(0).commonAncestorContainer['innerHTML']; */
+   this.onlytext = text;
+
+   let rangeit =  window.getSelection().getRangeAt(0);
+   let so = rangeit.startOffset;
+   let eo = rangeit.endOffset;
+
+   /* console.log(rangeit.commonAncestorContainer['innerHTML'])
+   */
+
+   /* this.getHints(text).forEach((hints, i) => {
+   
+    let placeholder = this.content.filter(token => token['isInput'] && "["+token['hint']+"]".includes(hints[0]))
+    if(placeholder.length > 0) {
+      console.log(hints[0], placeholder)
+    }
+   }) */
+
+   this.onlytext = this.convert(this.onlytext)
+
+  /*  this.dropdown.show(); */
+
+  }
+
+  convert(text) {
+    console.clear()
+    this.getHints(text).forEach( (hints) => {
+      let temp = this.content.find(token => token['isInput'] && "["+token['hint']+"]" == hints[0])
+      text = text.replace(hints[0].trim(), temp['placeholder'].trim())
+    })
+    return text.trim()
+  }
+
+  
 }

@@ -9,7 +9,10 @@ import { WidgetsRoutingModule } from './widgets-routing.module';
 
 import { MatTableModule } from '@angular/material/table';
 
-import { ExerciseComponent } from '../../components/exercise/exercise.component';
+/* import { TextSelectDirective } from "../../directives/textselect/text-select.directive";
+import { ExerciseComponent } from '../../components/exercise/exercise.component'; */
+
+import { AllModule } from '../../all.module';
 
 @NgModule({
   imports: [
@@ -19,7 +22,11 @@ import { ExerciseComponent } from '../../components/exercise/exercise.component'
     MatTableModule,
     BsDropdownModule,
     ModalModule.forRoot(),
+    AllModule
   ],
-  declarations: [ WidgetsComponent, ExerciseComponent ]
+  declarations: [ 
+    WidgetsComponent, 
+    /* TextSelectDirective,
+    ExerciseComponent, */ ]
 })
 export class WidgetsModule { }
