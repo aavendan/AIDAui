@@ -1,4 +1,4 @@
-<div class="animated fadeIn">
+<div class="animated fadeIn pb-3">
   <div class="card">
     <div class="card-header">
       <i class="icon-diamond"></i> AIDA Resources
@@ -34,239 +34,31 @@
     </div>
   </div>
 
-  <!--  -->
+  <accordion [closeOthers]="true" [isAnimated]="true">
+    <!-- heading="{{element.short}}" -->
+    <accordion-group *ngFor="let element of elements" panelClass="customClass">
+        <div accordion-heading>
+          <div class="pull-left float-left">{{element.short}}</div>
+          <span class="pull-right float-right pr-2">
+            <span class="font-weight-bold btn btninside btn-outline-dark" 
+                  (click)="$event.stopPropagation(); moreInfo($event)">
+              <i class="icon-plus h6"></i> More info</span>    
+            <span class="font-weight-bold btn btninside btn-outline-success" 
+                  (click)="$event.stopPropagation(); openModal(templateSaveExercise)">
+              <i class="icon-folder-alt h6"></i> Save</span>
+          </span>
+        </div>
+        <app-exercise 
+          [block]="element.block" 
+          [gaps]="element.gaps" 
+          [text]="element.text"
+          [enableSelect]="true"
+          (hasReportHint)="reportHint($event)"
+          (hasNewText)="openModal(templateSaveExercise)">
+        </app-exercise>
+    </accordion-group>
+  </accordion>
 
-  <table mat-table [dataSource]="texts" multiTemplateDataRows *ngIf="texts?.length > 0">
-    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-      <th mat-header-cell *matHeaderCellDef> {{column | titlecase }} </th>
-      <td mat-cell *matCellDef="let element"> {{element[column] }} </td>
-    </ng-container>
-
-    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        <div class="example-element-detail"
-            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-            <!-- *ngIf="element.show" -->
-
-            <div class="example-element-description mb-2">
-              <app-exercise 
-              [block]="element.block" 
-              [gaps]="element.gaps" 
-              [text]="element.text" 
-              (hasReportHint)="reportHint($event)">
-
-              </app-exercise>
-            </div>
-
-            <div class="example-element-diagram">
-              <p class="font-weight-bold pr-2"><i class="icon-plus h6"></i> More info</p>    
-              <p class="font-weight-bold pr-2"><i class="icon-pencil h6"></i> Edit</p>
-              <p class="font-weight-bold"><i class="icon-folder-alt h6"></i> Save</p>
-            </div>
-            
-         
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-        class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = element">
-    </tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-  </table>
-
-  <!-- <table class="table table-responsive-sm table-hover bg-white  border mb-0 my-2" *ngIf="texts?.length > 0">
-    <thead class="thead-light">
-      <tr>
-        <th class="text-center">Exercise</th>
-        <th>Type of exercise</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let text of texts; let i = index">
-      <tr>
-        <td class="text-center">
-          <div class="sample" style="width: 500px;">{{text | slice:0:100 }}</div>
-        </td>
-        <td>
-          <select id="select2" name="select2" class="form-control">
-            <option value="-1">Select a type of exercise</option>
-            <option value="0">Fill in the gap</option>
-          </select>
-          
-        </td>
-        <td>
-          <a data-toggle="collapse" href="#collapseExample{{i}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <span class="font-weight-bold pr-2"><i class="icon-plus h6"></i> More info</span>  
-          </a>
-          <span class="font-weight-bold pr-2"><i class="icon-pencil h6"></i> Edit</span>
-          <span class="font-weight-bold"><i class="icon-folder-alt h6"></i> Save</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3" class="collapse" id="collapseExample{{i}}">
-          <div class="m-3">
-            {{text}}
-          </div>
-        </td>
-      </tr>
-     
-    </tbody>
-  </table> -->
-
-
-  <!-- <div class="card" *ngIf="texts?.length > 0">
-    <div class="card-header">
-      Exercises 
-    </div>
-    <div class="card-body">
-      
-    </div>
-  </div> -->
-
-  <!--<div class="card">
-    <div class="card-header">
-      <i class="icon-drop"></i> Theme colors
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-primary theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Primary Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-secondary theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Secondary Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-success theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Success Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-danger theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Danger Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-warning theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Warning Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-info theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Info Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-light theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Light Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-dark theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Brand Dark Color</h6>
-        </div>
-      </div>
-    </div>
-  </div>
-   <div class="card">
-    <div class="card-header">
-      <i class="icon-drop"></i> Grays
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-100 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 100 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-200 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 200 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-300 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 300 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-400 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 400 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-500 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 500 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-600 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 600 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-700 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 700 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-800 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 800 Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-gray-900 theme-color w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Gray 900 Color</h6>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header">
-      <i class="icon-drop"></i> Additional colors
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-blue theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Blue Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-light-blue theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Light Blue Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-indigo theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Indigo Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-purple theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Purple Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-pink theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Pink Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-red theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Red Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-orange theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Orange Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-yellow theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Yellow Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-green theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Green Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-teal theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Teal Color</h6>
-        </div>
-        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mb-4">
-          <div class="bg-cyan theme-color mb-3 w-75 rounded mb-2" style="padding-top:75%"></div>
-          <h6>Cyan Color</h6>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
 
 <ng-template #templateReportHint>
@@ -281,5 +73,24 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>
+  </div>
+</ng-template>
+
+<ng-template #templateSaveExercise>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Save to ... </h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalSaveExercise.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let library of libraries; let i = index">
+      <input type="checkbox" id="cbox{{i}}" value="{{library.evaluation}}">
+      <!-- <label for="cbox{{i}}" class="library">{{library.course}} / {{library.book}} / {{library.chapter}} / {{library.evaluation}}</label> --> 
+      <label for="cbox{{i}}" class="library"><span *ngFor="let key of keys.path"> {{library[key]}} / </span> {{library[keys.evaluation]}}</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="mx-auto">+ new library</div>
   </div>
 </ng-template>

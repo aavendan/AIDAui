@@ -30,6 +30,7 @@ export class TypographyComponent {
   inputtext = '';
   item: any;
 
+  //save
   keys = {
     'path': ['course','book', 'chapter'],
     'evaluation': 'evaluation'
@@ -64,7 +65,11 @@ export class TypographyComponent {
 
   openModal(template: TemplateRef<any>) {
     this.modalSaveExercise = this.modalService.show(template, this.config);
-    
+  }
+  
+  reportHint(value){
+    this.item = value;
+    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
   }
 
   loadModels() {
@@ -132,13 +137,17 @@ export class TypographyComponent {
   }
 
   // Capitalize each word
-  capitalizeTheFirstLetterOfEachWord(words) {
-      var separateWord = words.toLowerCase().split(' ');
-      for (var i = 0; i < separateWord.length; i++) {
-        separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
-        separateWord[i].substring(1);
-      }
-      return separateWord.join(' ');
+  public capitalizeTheFirstLetterOfEachWord(words) {
+      try {
+        var separateWord = words.toLowerCase().split(' ');
+        for (var i = 0; i < separateWord.length; i++) {
+          separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
+          separateWord[i].substring(1);
+        }
+        return separateWord.join(' ');
+      } catch (error) {
+        console.error();
+      }      
   }
 
   // Generate a list of other tenses
@@ -168,14 +177,10 @@ export class TypographyComponent {
     this.models = [...arrTenses];
     return idx
   }
-  
-  reportHint(value){
-    this.item = value;
-    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
-  }
 
   newText(value) {
-    this.inputText.nativeElement.value = value;
+
+    /* this.inputText.nativeElement.value = value; */
   }
 
 }

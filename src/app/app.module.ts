@@ -25,6 +25,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
+
 /* import { TextSelectDirective } from "./directives/textselect/text-select.directive";
 import { ExerciseComponent } from './components/exercise/exercise.component'; */
 
@@ -47,6 +48,7 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts';
+import { DropdownsComponent } from './views/buttons/dropdowns.component';
 
 @NgModule({
   imports: [
@@ -73,8 +75,7 @@ import { ChartsModule } from 'ng2-charts';
     P500Component,
     LoginComponent,
     RegisterComponent,
-    /* TextSelectDirective,
-    ExerciseComponent, */
+    
   ],
   providers: [
     {

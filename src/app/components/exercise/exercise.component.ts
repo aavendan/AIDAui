@@ -24,10 +24,13 @@ export class ExerciseComponent implements OnInit {
   @Input() gaps:Array<any>;
   @Input() block:Array<any>;
   @Input() text:String = "";
+  @Input() enableSelect = false;
 
   @Output() hasInputs = new EventEmitter<boolean>();
   @Output() hasReportHint = new EventEmitter<any>();
   @Output() hasNewText = new EventEmitter<string>();
+
+  newChangesFlag = false;
 
   /* content: SafeHtml; */
   content = [];
@@ -48,22 +51,27 @@ export class ExerciseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /* console.log(this.block) */
-    this.text = this.block['text'];
-
-    if(this.block.length> 0)
+    
+    if(this.block && this.block.length> 0) {
+      this.text = this.block['text'];
       this.createExercise()
+    }
+      
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // changes.prop contains the old and the new value...
+
+    console.log(changes["gaps"], this.newChangesFlag)
     
-    if(!changes["gaps"].firstChange) {
+    if(changes["gaps"].currentValue && !this.newChangesFlag) {
       this.gaps = changes['gaps'].currentValue;
       this.block = changes['block'].currentValue;
       this.text = this.block['text'];
       
       this.createExercise()
+
+      this.newChangesFlag = true;
 
      /*  this.content = output; */
       // this.content = this.sanitizer.bypassSecurityTrustHtml(output);
@@ -147,6 +155,8 @@ export class ExerciseComponent implements OnInit {
   
   renderRectangles( event: TextSelectEvent ) : void {
 
+    if(!this.enableSelect) return;
+
     /* console.group( "Text Select Event" );
 		console.log( "Text:", event.text );
 		console.log( "Viewport Rectangle:", event.viewportRectangle );
@@ -159,7 +169,12 @@ export class ExerciseComponent implements OnInit {
 
 			this.hostRectangle = event.hostRectangle;
       this.hostRectangle.top = this.hostRectangle.top + 80;
-			this.onlytext = event.text.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s{2,}/g, ' ');;
+			this.onlytext = event.text.replace(/(\r\n|\n|\r)/gm, " ").replace(/\s{2,}/g, ' ');
+      
+      if(this.onlytext.length > 3) {
+        //Alert to parent
+        this.hasNewText.emit(this.onlytext);
+      }        
 
 		} else {
 

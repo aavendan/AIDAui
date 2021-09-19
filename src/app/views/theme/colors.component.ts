@@ -11,7 +11,7 @@ import { AidaService } from '../../services/aida.service';
 /* https://stackblitz.com/angular/ygdrrokyvkv?file=app%2Ftable-expandable-rows-example.ts */
 
 @Component({
-  styleUrls: ['colors.component.css'],
+  styleUrls: ['./colors.component.css'],
   templateUrl: 'colors.component.html',
   animations: [
     trigger('detailExpand', [
@@ -31,6 +31,7 @@ export class ColorsComponent implements OnInit {
   @ViewChild('templateReportHint') templateReportHint:TemplateRef<any>;
 
   modalReportHint: BsModalRef;
+  modalSaveExercise: BsModalRef;
 
   config = {
     animated: true
@@ -38,17 +39,49 @@ export class ColorsComponent implements OnInit {
 
   models = [];
   resources = [];
-  texts = [];
+  elements = [];
   item: any;
 
+  //datatable
   dataSource = [];
   columnsToDisplay = ['exercise'];
   expandedElement: Exercise;
 
+  //accordion
+  customClass = 'customClass';
+
+  //save
+  keys = {
+    'path': ['course','book', 'chapter'],
+    'evaluation': 'evaluation'
+  } 
+  libraries = [
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course II'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book2',
+      'chapter': 'Chapter 03',
+      'evaluation': 'Advanced English course'
+    },
+  ]
 
   constructor(private aidaService: AidaService, private modalService: BsModalService) {
     /* , @Inject(DOCUMENT) private _document: any */
+  
   }
+
+  
 
   /* public themeColors(): void {
     Array.from(this._document.querySelectorAll('.theme-color')).forEach((el: HTMLElement) => {
@@ -75,6 +108,15 @@ export class ColorsComponent implements OnInit {
     this.loadModels();
     this.loadResources();
     /* this.themeColors(); */
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalSaveExercise = this.modalService.show(template, this.config);
+  }
+
+  reportHint(value){
+    this.item = value;
+    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
   }
 
   loadModels() {
@@ -116,9 +158,10 @@ export class ColorsComponent implements OnInit {
       
       let results = await this.aidaService.getExercisesByResource(resourceName, contentMax)
       .then(responses => responses.map( response => {
-       
+        let short =  response['value']['text'].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s{2,}/g, ' ').slice(0,50) + ' ...'
+        
         return {
-          'exercise': response['value']['text'].slice(0,100) + ' ...',
+          'short': short,
           'text': response['value']['text'],
         }
 
@@ -133,11 +176,11 @@ export class ColorsComponent implements OnInit {
         })
       })
 
-      this.texts = results.filter( (el) => {
+      this.elements = results.filter( (el) => {
         return el['text'] != "";
       });
 
-      /* console.log(this.texts) */
+      /* console.log(this.elements) */
 
       /* this.aidaService.getExercisesByResource(resourceName, content)
       .then(response => { 
@@ -147,7 +190,7 @@ export class ColorsComponent implements OnInit {
     
   }
 
-  async convertToExercise(text, model) {
+  /* async convertToExercise(text, model) {
     return await this.aidaService.createExercise( text, model)
     .then(response => {
       return {
@@ -155,16 +198,21 @@ export class ColorsComponent implements OnInit {
         'gaps' : response.gaps
       }
     })
-  } 
+  }  */
 
   /* hasExercises(has: boolean){
     console.log(has)
   } */
 
-  reportHint(value){
-    this.item = value;
-    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
+  moreInfo() {
+    alert("More Info")
+    
   }
+
+  save() {
+    alert("Save")
+  }
+
 }
 
 export interface Exercise {

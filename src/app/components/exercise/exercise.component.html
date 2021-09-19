@@ -2,7 +2,12 @@
 <!-- (mouseup)="showSelectedText()"  -->
 <!-- (textSelect)="renderRectangles( $event )" -->
 <!-- (mouseup)="showSelectedText($event)" -->
-<div (textSelect)="renderRectangles($event)" class="container">
+
+<!-- Working -->
+<!-- (textSelect)="renderRectangles($event)" -->
+
+<p class="text-right font-italic">Select a part of current text as an exercise</p>
+<div (textSelect)="renderRectangles($event)" class="container exercise">
     <ng-template ngFor let-item [ngForOf]="content" let-i="index">
         <p *ngIf="item.isInput; then thenBlock else elseBlock"></p>
         <ng-template #thenBlock>
@@ -26,14 +31,15 @@
     </ng-template>
 </div>
 
-<div
+<!-- start working -->
+<!-- <div
     *ngIf="hostRectangle"
     class="indicator"
     [style.left.px]="hostRectangle.left"
     [style.top.px]="hostRectangle.top"
     [style.width.px]="hostRectangle.width"
     [style.height.px]="0">
-    <div class="indicator__cta">
+    <div class="indicator__cta"> -->
         <!--
             NOTE: Because we DON'T WANT the selected text to get deselected
             when we click on the call-to-action, we have to PREVENT THE 
@@ -42,14 +48,18 @@
             we then have to consume the click-intent by way of the (mouseup)
             event.
         -->
-        <a
+        <!-- <a
             (mousedown)="$event.preventDefault()"
             (mouseup)="$event.stopPropagation(); shareSelection()"
             class="indicator__cta-link">
-            Use this text as exercise
+            Save this sentence as exercise
         </a>
     </div>
-</div>
+</div> -->
+<!-- end working -->
+
+
+
 
 <!-- <h3>highlighted</h3>
 <div [innerHtml]="highlighted"></div> -->

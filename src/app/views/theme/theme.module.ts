@@ -26,10 +26,12 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 
 import { BadgesComponent } from '../notifications/badges.component';
-import { DropdownsComponent } from '../buttons/dropdowns.component';
 
+import { DropdownsComponent } from '../buttons/dropdowns.component';
 import { TextSelectDirective } from "../../directives/textselect/text-select.directive";
 import { ExerciseComponent } from '../../components/exercise/exercise.component';
+
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 import { AllModule } from '../../all.module';
 
@@ -38,6 +40,7 @@ import { AllModule } from '../../all.module';
     PopoverModule.forRoot(),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    AccordionModule.forRoot(),
     CommonModule,
     ThemeRoutingModule,
     HttpClientModule,
@@ -47,15 +50,18 @@ import { AllModule } from '../../all.module';
     MatTableModule,
     MatListModule,
     MatButtonModule,
-    /* AllModule */
+    AllModule
+    
   ],
   declarations: [
     ColorsComponent,
     TypographyComponent,
     BadgesComponent,
-    TextSelectDirective,
-    ExerciseComponent,
-    DropdownsComponent
+    
+    DropdownsComponent,
+    /* TextSelectDirective,
+    ExerciseComponent, */
+    
   ]
 })
 export class ThemeModule { }

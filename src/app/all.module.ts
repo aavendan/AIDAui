@@ -1,21 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DropdownsComponent } from './views/buttons/dropdowns.component';
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { TextSelectDirective } from "./directives/textselect/text-select.directive";
 import { ExerciseComponent } from './components/exercise/exercise.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    BsDropdownModule.forRoot(),
   ],
   declarations: [ 
-      
-    DropdownsComponent,
     TextSelectDirective,
     ExerciseComponent, ],
   exports: [ 
-        TextSelectDirective,
-        ExerciseComponent, 
+    TextSelectDirective,
+    ExerciseComponent,
     ]
 })
 export class AllModule { }

@@ -47,7 +47,11 @@
         <div class="card-header d-flex justify-content-between">
           <div>Tense: <b> {{tense}}</b></div>
           <div class="btn-group" dropdown placement="top left">
-            <button type="button" class="btn btn-success" (click)="openModal(templateSaveExercise)">Save Exercise</button>
+            <span class="font-weight-bold btn btn-outline-success" 
+                  (click)="$event.stopPropagation(); openModal(templateSaveExercise)">
+              <i class="icon-folder-alt h6"></i> Save
+            </span>
+            <!-- <button type="button" class="btn btn-success" (click)="openModal(templateSaveExercise)">Save whole text as an exercise</button> -->
             <!-- <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
               Save <span class="caret"></span>
             </button>
@@ -59,12 +63,13 @@
         </div>
         <div class="card-body">
           <app-exercise 
-          [block]="block" 
-          [gaps]="gaps" 
-          [text]="text"
-          (hasReportHint)="reportHint($event)"
-          (hasNewText)="newText($event)">
-        </app-exercise>
+            [block]="block" 
+            [gaps]="gaps" 
+            [text]="text"
+            [enableSelect]="true"
+            (hasReportHint)="reportHint($event)"
+            (hasNewText)="openModal(templateSaveExercise)">
+          </app-exercise>
         </div>
       </div>    
     </div>

@@ -23,9 +23,10 @@ export class WidgetsComponent {
 
   @ViewChild('templateReportHint') templateReportHint:TemplateRef<any>;
   modalReportHint: BsModalRef;
+  modalSaveExercise: BsModalRef;
 
   exercises = [];
-  texts = [];
+  elements = [];
   item: any;
 
   dataSource = [];
@@ -36,18 +37,55 @@ export class WidgetsComponent {
     animated: true
   };
 
+  //save
+  keys = {
+    'path': ['course','book', 'chapter'],
+    'evaluation': 'evaluation'
+  } 
+  libraries = [
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book1',
+      'chapter': 'Chapter 01',
+      'evaluation': 'AIDA course II'
+    },
+    {
+      'course': 'Grammar',
+      'book': 'Book2',
+      'chapter': 'Chapter 03',
+      'evaluation': 'Advanced English course'
+    },
+  ]
+
   constructor(private aidaService: AidaService, private modalService: BsModalService) {}
  
   ngOnInit() {  
     this.loadExercises()
   } 
 
+  openModal(template: TemplateRef<any>) {
+    this.modalSaveExercise = this.modalService.show(template, this.config);
+  }
+
+  reportHint(value){
+    this.item = value;
+    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
+  }
+
   async loadExercises() {
 
     let results = await this.aidaService.getExercises()
     .then(responses => responses.map( response => {
+
+      let short =  response['value']['text'].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s{2,}/g, ' ').slice(0,50) + ' ...'
       return {
-        'exercise': response['value']['text'].slice(0,100) + ' ...',
+        'short': short,
         'text': response['value']['text'],
         'block': response['value']['block'],
         'gaps': response['value']['gaps'],
@@ -55,18 +93,17 @@ export class WidgetsComponent {
       }
     }));
 
-    this.texts = results.filter( (el) => {
+    this.elements = results.filter( (el) => {
       return el['text'] != "";
     });
+    
 
-    /* console.log(this.texts) */
+    /* console.log(this.elements) */
 
   }
 
-
-  reportHint(value){
-    this.item = value;
-    this.modalReportHint = this.modalService.show(this.templateReportHint, this.config);
+  moreInfo() {
+    alert("More Info") 
   }
 
 }

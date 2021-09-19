@@ -3,65 +3,64 @@
       <div class="card-header">
         <i class="icon-grid"></i> List of exercises
       </div>
-      <div class="card-body">
-        <table mat-table [dataSource]="texts" multiTemplateDataRows *ngIf="texts?.length > 0">
-            <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-              <th mat-header-cell *matHeaderCellDef> {{column | titlecase }} </th>
-              <td mat-cell *matCellDef="let element"> {{element[column] }} </td>
-            </ng-container>
-        
-            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-            <ng-container matColumnDef="expandedDetail">
-              <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay?.length">
-                <div class="example-element-detail"
-                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                    <!-- *ngIf="element.show" -->
-        
-                    <div class="example-element-description mb-2">
-                      <app-exercise 
-                      [block]="element.block" 
-                      [gaps]="element.gaps" 
-                      [text]="element.text"
-                      (hasReportHint)="reportHint($event)">
-                      </app-exercise>
-                    </div>
-        
-                    <div class="example-element-diagram">
-                      <p class="font-weight-bold pr-2"><i class="icon-social-stumbleupon h6"></i> Similar exercises</p>
-                      <p class="font-weight-bold pr-2"><i class="icon-plus h6"></i> More info</p>    
-                      <p class="font-weight-bold pr-2"><i class="icon-pencil h6"></i> Edit</p>
-                      <p class="font-weight-bold"><i class="icon-folder-alt h6"></i> Save</p>
-                      <p class="font-weight-bold"><i class="icon-trash h6"></i> Delete</p>
-                    </div>
-                    
-                 
-                </div>
-              </td>
-            </ng-container>
-        
-            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-                class="example-element-row"
-                [class.example-expanded-row]="expandedElement === element"
-                (click)="expandedElement = element">
-            </tr>
-            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-          </table>
-      </div>
+      <accordion [closeOthers]="true" [isAnimated]="true">
+        <accordion-group *ngFor="let element of elements" panelClass="customClass">
+            <div accordion-heading>
+              <div class="pull-left float-left">{{element.short}}</div>
+              <span class="pull-right float-right pr-2">
+                <span class="font-weight-bold btn btninside btn-outline-dark" 
+                      (click)="$event.stopPropagation(); moreInfo($event)">
+                  <i class="icon-plus h6"></i> More info</span>    
+                <span class="font-weight-bold btn btninside btn-outline-success" 
+                      (click)="$event.stopPropagation(); openModal(templateSaveExercise)">
+                  <i class="icon-folder-alt h6"></i> Save</span>
+              </span>
+            </div>
+            <app-exercise 
+              [block]="element.block" 
+              [gaps]="element.gaps" 
+              [text]="element.text"
+              [enableSelect]="true"
+              (hasReportHint)="reportHint($event)"
+              (hasNewText)="openModal(templateSaveExercise)">
+            </app-exercise>
+        </accordion-group>
+      </accordion>
     </div>
 </div>
 
+<ng-template #templateSaveExercise>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Save to ... </h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalSaveExercise.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let library of libraries; let i = index">
+      <input type="checkbox" id="cbox{{i}}" value="{{library.evaluation}}">
+      <!-- <label for="cbox{{i}}" class="library">{{library.course}} / {{library.book}} / {{library.chapter}} / {{library.evaluation}}</label> --> 
+      <label for="cbox{{i}}" class="library"><span *ngFor="let key of keys.path"> {{library[key]}} / </span> {{library[keys.evaluation]}}</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="mx-auto">+ new library</div>
+  </div>
+</ng-template>
+
 <ng-template #templateReportHint>
-    <div class="modal-header">
-      <h3 class="modal-title pull-left">Report placeholder and hint</h3>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalReportHint.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div><b>Reporting: </b>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>
-    </div>
-  </ng-template>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Report placeholder and hint</h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalReportHint.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div><b>Reporting: </b>The placeholder <b>{{item.placeholder}}</b> with hint <b>{{item.hint}}</b>.</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="modalReportHint.hide()">Send</button>
+  </div>
+</ng-template>
+
+  

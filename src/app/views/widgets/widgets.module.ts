@@ -9,8 +9,11 @@ import { WidgetsRoutingModule } from './widgets-routing.module';
 
 import { MatTableModule } from '@angular/material/table';
 
-/* import { TextSelectDirective } from "../../directives/textselect/text-select.directive";
-import { ExerciseComponent } from '../../components/exercise/exercise.component'; */
+import { DropdownsComponent } from '../buttons/dropdowns.component';
+import { TextSelectDirective } from "../../directives/textselect/text-select.directive";
+import { ExerciseComponent } from '../../components/exercise/exercise.component';
+
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 import { AllModule } from '../../all.module';
 
@@ -21,12 +24,16 @@ import { AllModule } from '../../all.module';
     ChartsModule,
     MatTableModule,
     BsDropdownModule,
+    AccordionModule.forRoot(),
     ModalModule.forRoot(),
-    AllModule
+    /* https://www.py4u.net/discuss/1333648 */
+    AllModule,
+    
   ],
   declarations: [ 
     WidgetsComponent, 
-    /* TextSelectDirective,
+    /* DropdownsComponent,
+    TextSelectDirective,
     ExerciseComponent, */ ]
 })
 export class WidgetsModule { }

@@ -2,6 +2,7 @@
 
 * [CoreUI](https://coreui.io/angular/demo/free/2.11.1/#/dashboard)
 * [ngx-bootstrap](https://valor-software.com/ngx-bootstrap/#/)
+* [Bootstrap widgets](https://ng-bootstrap.github.io/#/home)
 * [figma](https://www.figma.com/proto/5T8k7lcAjkQrEkgi2S5uzE/AIDA---GrammarX5?node-id=5%3A2&scaling=scale-down)
 * [AIDA API](http://193.190.127.213:8000/aida/documentation)
 * [Ngx-bootstrap](https://valor-software.com/ngx-bootstrap/)
